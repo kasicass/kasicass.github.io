@@ -1,0 +1,43 @@
+
+<html>
+<head>
+<meta charset="utf-8">
+</head>
+<body><h1>配置 NAT 和 Bridged Network</h1>
+<h2>NAT 结构</h2>
+<p>```
+                Internet
+                     |
+                  Host
+                     |
+   |------------------------|-------------- ....
+VMachine1        VMachine2</p>
+<p>Host, 192.168.0.76
+VMachine1, 10.0.2.15
+VMachine2, 10.0.2.16
+gateway, 10.0.2.2
+dns, 10.0.2.3               # 要使用 -natdnshostresolver1 on，才能正常工作</p>
+<p>NAT 不方便从外部访问 VMachine，只能做 port forwarding。比如下面想实现 ssh 登陆 VMachine。</p>
+<p>从 127.0.0.1:2222 来的所有包，发送到 10.0.2.16:22 上。
+VBoxManage modifyvm "VM name" --natpf1 "guestssh,tcp,127.0.0.1,2222,10.0.2.16,22"</p>
+<p>删除 guestssh 这个 forwarding 设定。
+VBoxManage modifyvm "VM name" --natpf1 delete "guestssh"</p>
+<p>查看 vm 有几个 forwarding （还包括一些其他信息）
+VBoxManage showvminfo "VM name" --machinereadable</p>
+<p>让 VMachine 使用 Host 的 DNS 来解析域名。
+VBoxManage modifyvm "VM name" --natdnshostresolver1 on</p>
+<p>但是，vm1 和 vm2 之间是无法访问的，因为每个独立的 vm 都是一个独立的 NAT。
+```</p>
+<h2>Bridged Network</h2>
+<p>```
+VMachine 相当于与 host 处于同一网络。
+                         Internet
+                              |
+   |---------------|-------------------|----------- ...
+Host        VMachine1        VMachine2</p>
+<p>Host, 192.168.0.76
+VMachine1, 192.168.0.15
+VMachine2, 192.168.0.16
+```</p>
+</body>
+</html>
