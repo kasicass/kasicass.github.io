@@ -1,0 +1,21 @@
+
+<html>
+<head>
+<meta charset="utf-8">
+</head>
+<body><h1>[OpenBSD] 使用U盘</h1>
+<p>将U盘插入，看看 dmesg | tail，会有下面类似的信息。</p>
+<p><code>umass1 detached
+umass1 at uhub0 port 5 configuration 1 interface 0 "Kingston DataTraveler 2.0" rev 2.00/1.00 addr 3
+umass1: using SCSI over Bulk-Only
+scsibus3 at umass1: 2 targets, initiator 0
+sd2 at scsibus3 targ 1 lun 0: &lt;Kingston, DataTraveler 2.0, 1.00&gt; SCSI2 0/direct removable
+sd2: 1906MB, 243 cyl, 255 head, 63 sec, 512 bytes/sec, 3905407 sec total</code></p>
+<p>其中，umass1 是 usb disk storage 的 driver。</p>
+<p>注意看 sd2 那个，说明 /dev/sd2i 是对应的U盘的 device。只需：</p>
+<p><code>mount_msdos /dev/sd2 /mnt/usb</code></p>
+<p>即可。</p>
+<p>参考：</p>
+<p><a href="https://www.cyberciti.biz/faq/openbsd-mounting-usb-flash-drive-harddisk/">https://www.cyberciti.biz/faq/openbsd-mounting-usb-flash-drive-harddisk/</a></p>
+</body>
+</html>

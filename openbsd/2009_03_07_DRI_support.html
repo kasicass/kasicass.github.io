@@ -1,0 +1,24 @@
+
+<html>
+<head>
+<meta charset="utf-8">
+</head>
+<body><h1>[OpenBSD] DRI support</h1>
+<p>OB一直不支持DRI，不过从4.4开始，things are changing</p>
+<ul>
+<li><a href="http://dri.freedesktop.org/">http://dri.freedesktop.org/</a></li>
+</ul>
+<p>按文章所说，4.4开始，内核就已经有DRI的支持了，只是默认不打开。</p>
+<ul>
+<li><a href="http://undeadly.org/cgi?action=article&amp;sid=20081029164221">http://undeadly.org/cgi?action=article&amp;sid=20081029164221</a></li>
+</ul>
+<p>开启步骤：</p>
+<p><code>1) boot -c
+2) enable {inteldrm,radeondrm} (whichever you need to use)
+3) quit
+4) let it finish booting and startx
+5) if it works, you may make this permanent using config -ef /bsd</code></p>
+<p>进入 startx 后，验证是否起效，glxinfo | grep renderer，看看是否为 direct rendering</p>
+<p>不过我的 4.4 按上面的步骤，doesn't work :-(。4.5 已经默认开启 DRI，等出来后就升级，呵呵。</p>
+</body>
+</html>

@@ -1,0 +1,51 @@
+
+<html>
+<head>
+<meta charset="utf-8">
+</head>
+<body><h1>跑在龙芯上的 OpenBSD 4.7</h1>
+<p><a href="http://www.openbsd.org/47.html">http://www.openbsd.org/47.html</a></p>
+<h2><a href="http://www.openbsd.org/loongson.html">OpenBSD/loongson</a></h2>
+<p>New platform for systems based on the Loongson 2E and 2F MIPS-compatible processors. Supported machines include:</p>
+<ul>
+<li>Lemote Fuloong 2F mini-PC</li>
+<li>Lemote Lynloong all-in-one-PC</li>
+<li>Lemote Yeeloong netbook (8.9" and 10.1" models)</li>
+<li>EMTEC Gdium Liberty 1000 netbook</li>
+</ul>
+<p>4.7 出来几个月了，一直未关注。无意看了下 release note，原来已经支持“龙芯”。</p>
+<p>下定决心，支持一把国货。打算买一台逸珑8101迷你笔记本（Lemote Yeeloong netbook）</p>
+<p>过几天把本本的图片贴上来，hoho。此本只安装 OpenBSD，哇咔咔。</p>
+<p>有跟风购买的同学，请找下面的链接。:-)</p>
+<ul>
+<li><a href="http://loogson.taobao.com/">http://loogson.taobao.com/</a></li>
+<li><a href="http://www.lemote.com/">http://www.lemote.com/</a></li>
+</ul>
+<h2>loongson初体验</h2>
+<p>慢，很慢~~</p>
+<p>预装的RedFlag Linux实在有点慢，放了个 .avi，和播放幻灯片一样。算了，格了，装 OpenBSD。</p>
+<h2>loongson上安装OpenBSD</h2>
+<p>超级详细的安装指引在这：</p>
+<p><a href="ftp://ftp.openbsd.org/pub/OpenBSD/4.7/loongson/INSTALL.loongson">ftp://ftp.openbsd.org/pub/OpenBSD/4.7/loongson/INSTALL.loongson</a></p>
+<p><code>1. 弄个U盘，格式化为 ext2，把 4.7/loongson 的内容复制进去。（mkfs.ext2 /dev/sdb1）
+2. loongson 的 bios 使用的 PMON，默认有个启动菜单，用 c 进入命令行 PMON&gt; 模式
+3. PMON&gt; boot -k /dev/fs/ext2@usb0/bsd.rd，进入安装程序，按步骤安装
+4. 安装完毕，reboot，启动时按 Del 进入 PMON&gt;
+  4.1 PMON&gt; set moresz 30
+  4.2 PMON&gt; set bsd /bsd
+  4.3 PMON&gt; set ShowBootMenu no
+  4.4 PMON&gt; set al /dev/fs/ext2@wd0/boot/boot
+5. 断电，重启。</code></p>
+<p>好，关闭了启动菜单，设置了 OpenBSD 为默认启动。</p>
+<p><img alt="" src="2010_08_07_openbsd_4.7_on_loongson_image_01.png" /></p>
+<p>设置线网络（关闭有线网卡 rl0，设置好无线网卡 urtw0）</p>
+<p>```</p>
+<h1>cat /etc/hostname.rl0</h1>
+<h1>inet 192.168.0.93 255.255.255.0</h1>
+<h1>cat /etc/hostname.urtw0</h1>
+<p>inet 192.168.0.93 255.255.255.0
+nwid my_networkid wpa wpapsk <code>wpa-psk my_networkid my_passphrase</code>
+```</p>
+<p>参考：<a href="http://www.cromwell-intl.com/unix/openbsd-wireless-wpa2.html">http://www.cromwell-intl.com/unix/openbsd-wireless-wpa2.html</a></p>
+</body>
+</html>

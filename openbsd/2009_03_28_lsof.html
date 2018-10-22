@@ -1,0 +1,35 @@
+
+<html>
+<head>
+<meta charset="utf-8">
+</head>
+<body><h1>[OpenBSD] lsof - ls open file</h1>
+<p>昨天下午碰到个问题，du 看到 /tmp 里面明明没有多大的文件，但 df -h 就发现 /tmp 已经满了。自己经验不足，其实很大的情况就是 one process open /tmp/xxxfile 然后 unlink /tmp/xxxfile，进程不停地给此文件写内容，但 ls 自然是看不到这个文件的。</p>
+<p>经沈工推荐，尝试用下 lsof 这个好工具。下面简单说说用法：</p>
+<p>_dummy.dat 大约 500M</p>
+<p>我写了个小程序，简单 fopen("/tmp/_dummy.dat", "rb") 然后 block 住。如下，可以查看某个文件被哪些进程使用着。</p>
+<p>```</p>
+<h1>lsof /tmp/_dummy.dat</h1>
+<p>COMMAND  PID     USER   FD   TYPE DEVICE  SIZE/OFF NODE NAME
+a.out   9688 kasicass    3r  VREG    4,3 421724160   10 _dummy.dat
+```</p>
+<p>此时直接查看 /tmp 文件的使用情况</p>
+<p>```</p>
+<h1>lsof /tmp</h1>
+<p>COMMAND    PID     USER   FD   TYPE DEVICE  SIZE/OFF  NODE NAME
+a.out     9688 kasicass    3r  VREG    4,3 421724160    10 /tmp/_dummy.dat
+```</p>
+<p>然后 rm /tmp/_dummy.dat，使用 df -h 自然看到磁盘空间还是站用着，</p>
+<p>```</p>
+<h1>df -h</h1>
+<p>Filesystem     Size    Used   Avail Capacity  Mounted on
+/dev/sd0d     1008M    402M    556M    42%    /tmp
+```</p>
+<p>再查看 /tmp 文件的使用情况，哪个进程占用的磁盘空间，一览无余啦。</p>
+<p>```</p>
+<h1>lsof /tmp</h1>
+<p>COMMAND    PID     USER   FD   TYPE DEVICE  SIZE/OFF  NODE NAME
+a.out     9688 kasicass    3r  VREG    4,3 421724160    10 /tmp (/dev/sd0d)
+```</p>
+</body>
+</html>
